@@ -1,0 +1,19 @@
+{
+  "label": "REAL COMPETITION DATA",
+  "applications": 1526659,
+  "week_min": 0,
+  "week_max": 91,
+  "holdout_min_week": 88,
+  "holdout_max_week": 91,
+  "holdout_applications": 52611,
+  "data_version": "1d2ae54ea09d1723",
+  "feature_version": "aggregate-v1",
+  "source_rows": {
+    "base": 1526659,
+    "bureau": 85791,
+    "person": 2973991,
+    "previous": 14075487,
+    "static": 1526659
+  },
+  "synthetic": false
+}

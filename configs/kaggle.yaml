@@ -1,0 +1,32 @@
+# All 1.5m applications, a curated feature subset, no random row sampling.
+# Paths are relative to this file. See docs/data-dictionary.md.
+data_root: ../data/raw
+synthetic: false
+case_modulus: 1
+tables:
+  base:
+    glob: parquet_files/train/train_base.parquet
+    depth: 0
+    keys: [case_id]
+  static:
+    glob: parquet_files/train/train_static_0_*.parquet
+    depth: 0
+    keys: [case_id]
+    columns: [credamount_770A, annuity_780A, currdebt_22A, applications30d_658L, avgdpdtolclosure24_3658938P, avginstallast24m_3658937A, avgoutstandbalancel6m_4187114A, credtype_322L, disbursementtype_67L]
+  person:
+    glob: parquet_files/train/train_person_1.parquet
+    depth: 1
+    keys: [case_id, num_group1]
+    columns: [mainoccupationinc_384A, housetype_905L, incometype_1044T]
+  bureau:
+    glob: parquet_files/train/train_credit_bureau_b_1.parquet
+    depth: 1
+    keys: [case_id, num_group1]
+    columns: [debtvalue_227A, debtpastduevalue_732A, dpd_550P, credquantity_1099L]
+    external: true
+    optional: true
+  previous:
+    glob: parquet_files/train/train_applprev_2.parquet
+    depth: 2
+    keys: [case_id, num_group1, num_group2]
+    columns: [conts_type_509L]

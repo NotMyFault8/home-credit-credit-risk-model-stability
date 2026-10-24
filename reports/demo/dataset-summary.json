@@ -1,0 +1,18 @@
+{
+  "label": "SYNTHETIC DEMO",
+  "applications": 3200,
+  "week_min": 0,
+  "week_max": 31,
+  "holdout_min_week": 28,
+  "holdout_max_week": 31,
+  "holdout_applications": 400,
+  "data_version": "58c4f52104677320",
+  "feature_version": "aggregate-v1",
+  "source_rows": {
+    "base": 3200,
+    "bureau": 3200,
+    "history": 6413,
+    "payments": 12826
+  },
+  "synthetic": true
+}

@@ -1,0 +1,149 @@
+{
+  "scope": "development validation only; no promotion or holdout tuning",
+  "results": [
+    {
+      "variant": "static_only",
+      "fold": 0,
+      "features": 10,
+      "auc": 0.7191124453872976,
+      "brier": 0.02264696488207009,
+      "stability": 0.42142121299499974,
+      "slope": 0.027049965441658493,
+      "residual_std": 0.0428549679647858,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "static_only",
+      "fold": 1,
+      "features": 10,
+      "auc": 0.7078641423292833,
+      "brier": 0.02186617243009345,
+      "stability": 0.39016417822536087,
+      "slope": 0.0020123129784673953,
+      "residual_std": 0.05754321600913428,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "static_only",
+      "fold": 2,
+      "features": 10,
+      "auc": 0.7330472943068645,
+      "brier": 0.018339049814352602,
+      "stability": 0.4308319182898631,
+      "slope": 0.013177384511853973,
+      "residual_std": 0.05700107947612647,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "history",
+      "fold": 0,
+      "features": 35,
+      "auc": 0.742940341681845,
+      "brier": 0.022483955430250245,
+      "stability": 0.4683788591221739,
+      "slope": 0.03715395081733835,
+      "residual_std": 0.050308623643893914,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "history",
+      "fold": 1,
+      "features": 35,
+      "auc": 0.7492951181129749,
+      "brier": 0.02163759906958951,
+      "stability": 0.4738314455971904,
+      "slope": 0.011587955793991786,
+      "residual_std": 0.0457181673316371,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "history",
+      "fold": 2,
+      "features": 35,
+      "auc": 0.7674430973117645,
+      "brier": 0.018071289701050625,
+      "stability": 0.5047451489799792,
+      "slope": 0.031104422881735073,
+      "residual_std": 0.047224679816751026,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "stable_missingness",
+      "fold": 0,
+      "features": 29,
+      "auc": 0.6146692067736808,
+      "brier": 0.02301993095438055,
+      "stability": 0.22737300530783153,
+      "slope": 0.010316303576873366,
+      "residual_std": 0.012689897701121455,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "stable_missingness",
+      "fold": 1,
+      "features": 29,
+      "auc": 0.6354521929560586,
+      "brier": 0.021993445941946552,
+      "stability": 0.262799557135665,
+      "slope": 0.0163769828006822,
+      "residual_std": 0.0166667001022049,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "stable_missingness",
+      "fold": 2,
+      "features": 29,
+      "auc": 0.6269336129995338,
+      "brier": 0.018437517201587945,
+      "stability": 0.23994599676154202,
+      "slope": 0.020570493553852206,
+      "residual_std": 0.022779838808368282,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "time_weighted",
+      "fold": 0,
+      "features": 35,
+      "auc": 0.746851950928744,
+      "brier": 0.022442701123111093,
+      "stability": 0.47967471891560304,
+      "slope": 0.03614218851007029,
+      "residual_std": 0.04472899798265028,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "time_weighted",
+      "fold": 1,
+      "features": 35,
+      "auc": 0.751177237324931,
+      "brier": 0.021617823883102124,
+      "stability": 0.47974446364037787,
+      "slope": 0.008017980722277244,
+      "residual_std": 0.042838733464790946,
+      "weeks": 4,
+      "undefined_weeks": 0
+    },
+    {
+      "variant": "time_weighted",
+      "fold": 2,
+      "features": 35,
+      "auc": 0.7677033694933701,
+      "brier": 0.018069351786928985,
+      "stability": 0.5090208509603094,
+      "slope": 0.026679066484989338,
+      "residual_std": 0.042152364576038145,
+      "weeks": 4,
+      "undefined_weeks": 0
+    }
+  ]
+}

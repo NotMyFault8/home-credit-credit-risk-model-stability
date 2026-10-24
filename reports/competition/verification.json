@@ -1,0 +1,13 @@
+{
+  "api_batch_max_abs_difference": 0.0,
+  "requests": 30,
+  "rows_per_request": 100,
+  "in_process_p95_ms": 22.86950001143847,
+  "in_process_rows_per_second": 5974.33867489923,
+  "measurement_scope": "FastAPI TestClient, serial warm requests; includes bundle loading, excludes network",
+  "fallback_mode": "internal",
+  "fallback_parity": true,
+  "incremental_matches_full_rebuild": true,
+  "distinct_version_rollback": true,
+  "failed_run_audited": true
+}
