@@ -12,9 +12,11 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -e '.[dev]'
-      - run: ruff check src tests
+      - run: ruff check src tests scripts
       - run: pytest -q
       - run: home-credit demo --output artifacts/ci
+      - run: docker build -t home-credit-ci .
+      - run: docker run --rm home-credit-ci home-credit demo --output /tmp/demo
       - uses: actions/upload-artifact@v4
         with:
           name: synthetic-evaluation
