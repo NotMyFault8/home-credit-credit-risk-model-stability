@@ -1,6 +1,6 @@
 # Reporting outputs
 
-The project reports model behavior with one Python-generated chart and compact CSV summaries. It does not require Tableau, Power BI, a server, or a BI license.
+The project's reporting layer is a Python-generated chart with compact CSV summaries. It runs locally and has no separate dashboard application.
 
 ## Chart
 
