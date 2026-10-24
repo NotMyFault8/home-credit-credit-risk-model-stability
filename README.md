@@ -1,6 +1,6 @@
 # Home Credit Risk & Stability Platform
 
-A reproducible data engineering and machine learning project for **credit-risk prediction across time**. It turns multi-grain Parquet sources into one row per application, compares models using forward validation, serves versioned scores, and exports risk, stability, quality, and operational metrics to Tableau.
+A reproducible data engineering and machine learning project for **credit-risk prediction across time**. It turns multi-grain Parquet sources into one row per application, evaluates models on later weeks, serves versioned scores, and produces risk, stability, data-quality, and run-health reports.
 
 Built around the [Home Credit — Credit Risk Model Stability competition](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability). This is a historical-data engineering prototype, not a lending decision system.
 
@@ -13,8 +13,8 @@ Built around the [Home Credit — Credit Risk Model Stability competition](https
 | Run a complete example in minutes | [Quick start](#quick-start) |
 | Understand the design | [Architecture](docs/architecture.md) |
 | Inspect measured results and limitations | [Results](reports/RESULTS.md) · [Model card](docs/model-card.md) |
+| Read the generated charts and metric tables | [Reporting guide](reports/REPORTING.md) |
 | Use the competition data | [Data guide](docs/data-dictionary.md) |
-| Open the four-page dashboard | [Tableau guide](bi/README.md) |
 | Recover a run or roll back models | [Runbook](docs/runbook.md) |
 | Review what was verified | [Acceptance evidence](docs/acceptance.md) |
 
@@ -48,9 +48,9 @@ HOME_CREDIT_REGISTRY=artifacts/competition/registry \
 ## What the project implements
 
 - **Data engineering:** content-addressed Bronze snapshots, explicit table grains, orphan and duplicate checks, projected Parquet reads, Silver normalization, parent-balanced depth-two aggregation, and Gold uniqueness checks in Python and DuckDB.
-- **Model engineering:** train-only imputation/encoding, three expanding temporal folds, baseline/LightGBM comparison, untouched final four-week holdout, weekly AUC/Gini, Brier score, stability metric, and versioned bundles.
+- **Model engineering:** train-only imputation and encoding, three expanding temporal folds, baseline/LightGBM comparison, untouched final four-week holdout, weekly AUC/Gini, Brier score, stability metric, and versioned bundles.
 - **Operations:** batch/API scoring parity, separately evaluated internal-source fallback, explicit model activation and rollback, week-scoped backfill, run manifests, configurable simulated label delay, missingness and PSI monitoring.
-- **Delivery:** a Tableau workbook generator and four-page workbook, reproducible metrics, Docker image definition, optional Prefect/MLflow integrations, and GitHub Actions checks.
+- **Reporting:** reproducible aggregate CSVs and a Python-generated model-stability chart, alongside Docker and GitHub Actions checks.
 
 ```mermaid
 flowchart LR
@@ -61,7 +61,7 @@ flowchart LR
   E --> F[Versioned model pair]
   F --> G[Batch / FastAPI]
   G --> H[Replay monitoring]
-  H --> I[Tableau dashboards]
+  H --> I[CSV summaries and charts]
 ```
 
 ## Repository map
@@ -69,10 +69,9 @@ flowchart LR
 ```text
 src/home_credit/     Pipeline, features, training, API, monitoring, CLI
 configs/             Explicit competition source and feature selection
-scripts/             Dashboard generation and verification evidence
-tests/              Data, temporal validation, API and recovery tests
-bi/                  Tableau workbook and usage guide
-reports/             Aggregate results and small synthetic summaries
+scripts/             Report generation and verification evidence
+tests/               Data, temporal validation, API and recovery tests
+reports/             Results, charts, aggregate CSV summaries and reporting guide
 docs/                Architecture, data contract, model card and runbook
 .github/workflows/   Continuous integration
 ```
