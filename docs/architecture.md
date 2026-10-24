@@ -2,7 +2,7 @@
 
 ## Problem and outcome
 
-The project demonstrates how to create stable application-level credit-risk features from multiple source grains, validate performance on later weeks, and expose measured behavior through reproducible operational and BI outputs.
+The project demonstrates how to create stable application-level credit-risk features from multiple source grains, validate performance on later weeks, and expose measured behavior through reproducible reports and operational outputs.
 
 The unit of analysis is `case_id`, an application identifier. It is not a persistent customer identifier. Sources are linked only through their declared keys. Every join must preserve the base application's cardinality.
 
@@ -16,6 +16,7 @@ The unit of analysis is `case_id`, an application identifier. It is not a persis
 6. Fit preprocessing separately for each training fold. Compare logistic regression and LightGBM with the same temporal windows. Train selected full/internal candidates on development weeks only.
 7. Evaluate the final four weeks once and record performance. Activate a compatible pair only after computable metrics exist.
 8. Score via a shared function. Explicit external outages route to the internal model. Replay monitoring hides labels until simulated maturity.
+9. Generate weekly aggregate CSVs and a model-stability chart from the measured outputs.
 
 ## Storage and recovery
 
