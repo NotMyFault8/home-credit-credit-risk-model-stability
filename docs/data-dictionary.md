@@ -36,9 +36,11 @@ Add its file glob, depth, unique keys, selected columns and whether it is extern
 
 Source arrival timestamps and label-availability dates are not provided by this prototype. Do not manufacture a point-in-time guarantee or recency window from an ambiguous date field. Unexpected duplicates, orphan IDs and missing required sources stop processing; optional-source absence is explicit.
 
-## BI tables
+## Aggregate report tables
 
-- `risk_summary_weekly`: one row per week, model version, mode, observation cutoff and sample scope. Counts/risk bands include all scored rows; actual default rate is null until maturity.
+These files are generated under `reports/competition/bi/` and `reports/demo/bi/`. They are compact, machine-readable weekly summaries used alongside the static chart.
+
+- `risk_summary_weekly`: one row per week, model version, mode, observation cutoff and sample scope. Counts and risk bands include all scored rows; actual default rate is null until maturity.
 - `model_performance_weekly`: same grain; weekly AUC, Gini and Brier only for mature labels and sufficiently sized two-class weeks.
 - `data_quality_weekly`: one row per feature/week, with missingness, source coverage where applicable, and PSI against development data.
 - `calibration_weekly`: probability-bin counts, mean score and observed default rate for mature labels.
