@@ -43,12 +43,12 @@ The selected missingness-stability rule materially hurts discrimination. Recent-
 - Docker API: live health endpoint returned ready; HTTP scores matched local batch scores exactly on three verification records.
 - Automated tests: **14 passed**. Optional MLflow and Prefect integrations were exercised on synthetic data.
 
-Machine-readable evidence: [evaluation](competition/evaluation.json), [verification](competition/verification.json), [dataset scope](competition/dataset-summary.json), [ablations](competition/ablations.csv), [run metrics](competition/bi/pipeline_runs.csv).
+Machine-readable evidence: [evaluation](competition/evaluation.json), [verification](competition/verification.json), [dataset scope](competition/dataset-summary.json), [ablations](competition/ablations.csv), [run metrics](competition/bi/pipeline_runs.csv). The [reporting guide](REPORTING.md) explains the chart and aggregate CSVs.
 
 ## Synthetic demonstration
 
 The separate [demo results](demo/evaluation.json) use 3,200 fictional applications and test engineering behavior. Their distributions and scores are unrelated to competition performance. Negative stability results in the demo are retained, not suppressed.
 
-## Remaining qualification
+## Scope and limitations
 
-The Tableau workbook is structurally validated, but the installed app timed out and its rendered layout remains unverified. No managed cloud deployment or Tableau Public publication was performed. Historical source timing, real label maturity, fairness, production calibration, model governance and operational service-level objectives require separate validation before real lending use.
+The reporting deliverables are a Python-generated model-stability chart and machine-readable aggregate CSV summaries. No interactive business-intelligence workbook, managed cloud deployment, or Tableau Public publication is included. Historical source timing, real label maturity, fairness, production calibration, model governance and operational service-level objectives require separate validation before real lending use.
