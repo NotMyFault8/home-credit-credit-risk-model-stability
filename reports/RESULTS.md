@@ -51,4 +51,4 @@ The separate [demo results](demo/evaluation.json) use 3,200 fictional applicatio
 
 ## Scope and limitations
 
-The reporting deliverables are a Python-generated model-stability chart and machine-readable aggregate CSV summaries. No interactive business-intelligence workbook, managed cloud deployment, or Tableau Public publication is included. Historical source timing, real label maturity, fairness, production calibration, model governance and operational service-level objectives require separate validation before real lending use.
+The reporting deliverables are a Python-generated model-stability chart and machine-readable aggregate CSV summaries. No interactive dashboard or managed cloud deployment is included. Historical source timing, real label maturity, fairness, production calibration, model governance and operational service-level objectives require separate validation before real lending use.
