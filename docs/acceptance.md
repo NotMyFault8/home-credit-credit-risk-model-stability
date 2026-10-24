@@ -10,9 +10,9 @@
 | Batch/API consistency | Zero maximum difference on real-data verification sample | Passed |
 | Recovery | External outage, audited failed run, distinct-version rollback | Passed |
 | Performance measurement | Runtime, RSS, in-process serial P95 and throughput recorded | Passed within stated scope |
-| BI metric consistency | Python aggregates, maturity flags, typed source references and schema validation | Passed structurally; visual QA pending |
+| Reporting consistency | Python-generated chart and CSV summaries use explicit week, model, maturity and sample-scope fields | Passed |
 | Reproducible small flow | Demo, tests and optional Prefect/MLflow runs | Passed |
 
 The final competition configuration uses all applications and a curated field subset; it is not an exhaustive feature search. Tests use synthetic data and require no competition download. CI reruns lint, tests and the small demonstration. The Docker image builds and starts successfully. Its live health endpoint returned ready and its HTTP scoring matched local batch predictions exactly on three verification records. CI also runs the fictional end-to-end flow inside the container.
 
-Not claimed: Kubernetes/cloud deployment, real CDC, live banking integration, production fairness certification, business profit, competition ranking, or a published Tableau Public dashboard.
+Not claimed: interactive BI dashboards, Kubernetes/cloud deployment, real CDC, live banking integration, production fairness certification, business profit, competition ranking, or a published Tableau Public dashboard.
