@@ -14,7 +14,7 @@ The [competition metric](https://www.kaggle.com/competitions/home-credit-credit-
 
 ## Validation and monitoring
 
-Reported metrics include overall AUC/Brier, weekly Gini, trend slope, residual variation and stability. Calibration bins are available in BI exports. PSI above 0.2 is a demonstration alert, not proof of failure or an automatic retraining trigger. External bureau failure routes explicitly to a separately trained internal model.
+Reported metrics include overall AUC/Brier, weekly Gini, trend slope, residual variation and stability. Calibration bins are available in the aggregate CSV reports. PSI above 0.2 is a demonstration alert, not proof of failure or an automatic retraining trigger. External bureau failure routes explicitly to a separately trained internal model.
 
 ## Limitations
 
