@@ -40,6 +40,7 @@ The selected missingness-stability rule materially hurts discrimination. Recent-
 - API verification: **30 serial in-process requests × 100 rows**, P95 **22.87 ms**, approximately **5,974 rows/sec**. Includes bundle loading and request handling; excludes network transport and concurrent-client load.
 - API/batch maximum score difference: **0.0** on the verification sample.
 - Explicit external-source fallback, modified-row backfill equivalence, failed-run audit, and rollback between distinct version identifiers all passed.
+- Docker API: live health endpoint returned ready; HTTP scores matched local batch scores exactly on three verification records.
 - Automated tests: **14 passed**. Optional MLflow and Prefect integrations were exercised on synthetic data.
 
 Machine-readable evidence: [evaluation](competition/evaluation.json), [verification](competition/verification.json), [dataset scope](competition/dataset-summary.json), [ablations](competition/ablations.csv), [run metrics](competition/bi/pipeline_runs.csv).

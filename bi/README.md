@@ -1,6 +1,6 @@
 # Credit Risk & Model Stability Dashboard
 
-Open **credit-risk-stability.twb** in Tableau Desktop or Tableau Public. The workbook references the small aggregate CSVs under `../reports/competition/bi/`; raw applications and per-case predictions are not embedded.
+Open **credit-risk-stability.twbx** for the portable packaged workbook, or **credit-risk-stability.twb** in Tableau Desktop or Tableau Public. The workbook references the small aggregate CSVs under `../reports/competition/bi/`; raw applications and per-case predictions are not embedded.
 
 Four pages, sixteen worksheets:
 

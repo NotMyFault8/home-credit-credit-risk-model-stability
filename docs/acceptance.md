@@ -13,6 +13,6 @@
 | BI metric consistency | Python aggregates, maturity flags, typed source references and schema validation | Passed structurally; visual QA pending |
 | Reproducible small flow | Demo, tests and optional Prefect/MLflow runs | Passed |
 
-The final competition configuration uses all applications and a curated field subset; it is not an exhaustive feature search. Tests use synthetic data and require no competition download. CI reruns lint, tests and the small demonstration. The Docker definition packages the API and project runtime; container validation is recorded separately when available.
+The final competition configuration uses all applications and a curated field subset; it is not an exhaustive feature search. Tests use synthetic data and require no competition download. CI reruns lint, tests and the small demonstration. The Docker image builds and starts successfully. Its live health endpoint returned ready and its HTTP scoring matched local batch predictions exactly on three verification records. CI also runs the fictional end-to-end flow inside the container.
 
 Not claimed: Kubernetes/cloud deployment, real CDC, live banking integration, production fairness certification, business profit, competition ranking, or a published Tableau Public dashboard.
