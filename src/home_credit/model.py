@@ -14,6 +14,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 
+from .calibration import select_calibrator
 from .common import now, write_json
 from .data import FEATURE_VERSION, RESERVED
 from .evaluation import evaluate, temporal_splits
@@ -91,6 +92,20 @@ def clean(frame, columns):
     return result
 
 
+def _json_records(frame):
+    return [
+        {
+            key: None
+            if pd.isna(value)
+            else value.item()
+            if isinstance(value, np.generic)
+            else value
+            for key, value in row.items()
+        }
+        for row in frame.to_dict(orient="records")
+    ]
+
+
 def train(gold, manifest, registry, external_sources=(), mlflow_uri=None):
     registry = Path(registry)
     registry.mkdir(parents=True, exist_ok=True)
@@ -99,9 +114,9 @@ def train(gold, manifest, registry, external_sources=(), mlflow_uri=None):
     for mode in ["full", "internal"]:
         cols = features(gold, external_sources, internal=mode == "internal")
         X = clean(gold, cols)
-        rankings = []
+        rankings, oof_by_kind = [], {}
         for kind in ["baseline", "lightgbm"]:
-            fold_metrics = []
+            fold_metrics, oof_predictions = [], []
             for i, (tr, va) in enumerate(splits):
                 if gold.loc[tr, "target"].nunique() != 2:
                     raise ValueError("Training window needs both classes")
@@ -109,7 +124,11 @@ def train(gold, manifest, registry, external_sources=(), mlflow_uri=None):
                 model.fit(X.loc[tr], gold.loc[tr, "target"])
                 pred = gold.loc[va, ["case_id", "WEEK_NUM", "target"]].copy()
                 pred["score"] = model.predict_proba(X.loc[va])[:, 1]
-                metrics, _ = evaluate(pred)
+                pred["raw_score"] = pred["score"]
+                pred["train_max_week"] = int(gold.loc[tr, "WEEK_NUM"].max())
+                pred["fold"] = i
+                oof_predictions.append(pred)
+                metrics, weekly = evaluate(pred)
                 experiments.append(
                     {
                         "mode": mode,
@@ -117,6 +136,8 @@ def train(gold, manifest, registry, external_sources=(), mlflow_uri=None):
                         "fold": i,
                         "train_max_week": int(gold.loc[tr, "WEEK_NUM"].max()),
                         "validation_min_week": int(gold.loc[va, "WEEK_NUM"].min()),
+                        "validation_max_week": int(gold.loc[va, "WEEK_NUM"].max()),
+                        "weekly_metrics": _json_records(weekly),
                         **metrics,
                     }
                 )
@@ -124,6 +145,7 @@ def train(gold, manifest, registry, external_sources=(), mlflow_uri=None):
             valid_scores = [m["stability"] for m in fold_metrics if m["stability"] is not None]
             ranking = float(np.mean(valid_scores)) if len(valid_scores) == len(splits) else -np.inf
             rankings.append((ranking, kind))
+            oof_by_kind[kind] = pd.concat(oof_predictions, ignore_index=True)
         if all(not np.isfinite(r[0]) for r in rankings):
             raise ValueError("No candidate has defined stability across every validation fold")
         _, chosen = max(rankings)
@@ -143,8 +165,13 @@ def train(gold, manifest, registry, external_sources=(), mlflow_uri=None):
             "columns": cols,
         }
         version = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()[:16]
+        calibrator, calibration = select_calibrator(
+            oof_by_kind[chosen], version, manifest["data_version"], mode
+        )
         bundle = {
             "pipeline": model,
+            "calibrator": calibrator,
+            "calibration": calibration,
             "columns": cols,
             "version": version,
             "mode": mode,
@@ -162,10 +189,14 @@ def train(gold, manifest, registry, external_sources=(), mlflow_uri=None):
         (folder / "model.joblib.tmp").replace(folder / "model.joblib")
         write_json(
             folder / "metadata.json",
-            {k: v for k, v in bundle.items() if k != "pipeline"},
+            {k: v for k, v in bundle.items() if k not in {"pipeline", "calibrator"}},
         )
         pred = gold.loc[test, ["case_id", "WEEK_NUM", "target"]].copy()
-        pred["score"] = model.predict_proba(X.loc[test])[:, 1]
+        pred["raw_score"] = model.predict_proba(X.loc[test])[:, 1]
+        pred["calibrated_score"] = calibrator.predict(pred.raw_score)
+        # Backward compatibility: score remains the uncalibrated model probability.
+        pred["score"] = pred["raw_score"]
+        pred["calibrator_version"] = calibration["version"]
         pred["model_version"], pred["mode"] = version, mode
         test_predictions.append(pred)
         bundles[mode] = version
@@ -197,6 +228,7 @@ def activate(registry, versions):
         bundle = joblib.load(registry / versions[mode] / "model.joblib")
         if bundle["mode"] != mode or bundle["feature_version"] != FEATURE_VERSION:
             raise ValueError("Incompatible model bundle")
+        _validate_calibrator_binding(bundle)
     active = registry / "active.json"
     if active.exists():
         write_json(registry / "previous.json", json.loads(active.read_text()))
@@ -216,10 +248,29 @@ def load_active(registry, unavailable=()):
     if unknown:
         raise ValueError(f"Unknown external sources: {sorted(unknown)}")
     mode = "internal" if unavailable else "full"
-    return joblib.load(registry / versions[mode] / "model.joblib")
+    bundle = joblib.load(registry / versions[mode] / "model.joblib")
+    _validate_calibrator_binding(bundle)
+    return bundle
+
+
+def _validate_calibrator_binding(bundle):
+    """Reject a calibrator copied from another model or mode."""
+    calibration = bundle.get("calibration")
+    if calibration is None:
+        return
+    if calibration.get("model_version") != bundle.get("version"):
+        raise ValueError("Calibrator is not bound to this model version")
+    if calibration.get("mode") != bundle.get("mode"):
+        raise ValueError("Calibrator mode does not match model mode")
 
 
 def score(bundle, frame):
+    """Return the legacy raw model probability."""
+    return score_details(bundle, frame)["raw_score"]
+
+
+def score_details(bundle, frame):
+    """Return raw and calibrated probabilities from the bound model bundle."""
     missing = set(bundle["columns"]) - set(frame)
     if missing:
         raise ValueError(f"Missing contracted features: {sorted(missing)}")
@@ -231,4 +282,7 @@ def score(bundle, frame):
                 raise ValueError(f"{col} must be numeric") from exc
             if np.isinf(numeric.dropna()).any():
                 raise ValueError(f"{col} contains infinity")
-    return bundle["pipeline"].predict_proba(clean(frame, bundle["columns"]))[:, 1]
+    raw = bundle["pipeline"].predict_proba(clean(frame, bundle["columns"]))[:, 1]
+    calibrator = bundle.get("calibrator")
+    calibrated = calibrator.predict(raw) if calibrator is not None else raw.copy()
+    return {"raw_score": raw, "calibrated_score": calibrated}

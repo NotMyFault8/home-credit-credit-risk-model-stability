@@ -8,7 +8,7 @@ import pandas as pd
 
 from .common import now, write_parquet
 from .data import FEATURE_VERSION, build_features, incremental, ingest
-from .model import activate, load_active, rollback, score
+from .model import activate, load_active, rollback, score_details
 from .synthetic import generate
 from .workflow import prefect_run, run
 
@@ -57,12 +57,16 @@ def main():
     elif args.command == "score":
         frame = pd.read_parquet(args.input)
         bundle = load_active(args.registry, args.unavailable)
+        predictions = score_details(bundle, frame)
         result = frame[["case_id"]].copy()
-        result["score"] = score(bundle, frame)
+        result["raw_score"] = predictions["raw_score"]
+        result["calibrated_score"] = predictions["calibrated_score"]
+        result["score"] = result["raw_score"]
         result["model_version"], result["feature_version"] = (
             bundle["version"],
             FEATURE_VERSION,
         )
+        result["calibrator_version"] = bundle.get("calibration", {}).get("version")
         result["scored_at"] = now()
         result["quality_status"] = "degraded" if bundle["mode"] == "internal" else "ok"
         write_parquet(result, args.output)

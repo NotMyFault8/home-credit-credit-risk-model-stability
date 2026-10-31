@@ -12,7 +12,7 @@ Built around the [Home Credit — Credit Risk Model Stability competition](https
 |---|---|
 | Run a complete example in minutes | [Quick start](#quick-start) |
 | Understand the design | [Architecture](docs/architecture.md) |
-| Inspect measured results and limitations | [Results](reports/RESULTS.md) · [Model card](docs/model-card.md) |
+| Inspect measured results and limitations | [Results](reports/RESULTS.md) · [Validation report](reports/MODEL_VALIDATION_REPORT.md) · [Model card](docs/model-card.md) |
 | Read the generated charts and metric tables | [Reporting guide](reports/REPORTING.md) |
 | Use the competition data | [Data guide](docs/data-dictionary.md) |
 | Recover a run or roll back models | [Runbook](docs/runbook.md) |
@@ -48,9 +48,11 @@ HOME_CREDIT_REGISTRY=artifacts/competition/registry \
 ## What the project implements
 
 - **Data engineering:** content-addressed Bronze snapshots, explicit table grains, orphan and duplicate checks, projected Parquet reads, Silver normalization, parent-balanced depth-two aggregation, and Gold uniqueness checks in Python and DuckDB.
-- **Model engineering:** train-only imputation and encoding, three expanding temporal folds, baseline/LightGBM comparison, untouched final four-week holdout, weekly AUC/Gini, Brier score, stability metric, and versioned bundles.
-- **Operations:** batch/API scoring parity, separately evaluated internal-source fallback, explicit model activation and rollback, week-scoped backfill, run manifests, configurable simulated label delay, missingness and PSI monitoring.
-- **Reporting:** reproducible aggregate CSVs and a Python-generated model-stability chart, alongside Docker and GitHub Actions checks.
+- **Model engineering:** train-only imputation and encoding, three expanding temporal folds, baseline/LightGBM comparison, retrospective final four-week evaluation, weekly AUC/Gini/Brier/log loss/ECE, confidence intervals, the original stability metric, and versioned bundles.
+- **Probability calibration:** development temporal out-of-fold predictions compare raw, Platt/sigmoid, and isotonic methods. Full/Internal calibrators are selected and version-bound separately; legacy `score` remains raw while `raw_score` and `calibrated_score` are explicit.
+- **Robustness and monitoring:** development-frozen segments, small-sample non-estimable states, numeric/categorical feature PSI, missingness/source coverage, raw/calibrated score drift, traceable example alerts, and simulated label maturity.
+- **Operations:** batch/API score parity, separately evaluated internal-source fallback, explicit model activation and rollback, week-scoped backfill, and run manifests.
+- **Reporting:** reproducible aggregate CSVs, a generated validation report, Python charts, and the packaged Tableau workbook, alongside Docker and GitHub Actions checks.
 
 ```mermaid
 flowchart LR
@@ -82,6 +84,6 @@ Raw data, per-application predictions, serialized models, credentials, and runti
 
 The real-data configuration uses all application rows and a curated feature subset, rather than every available competition column. Data hashes, selected schemas, feature version, source-code fingerprint, parameters, seed, and model versions are recorded. `requirements-lock.txt` records the tested local environment; use the package version ranges for cross-platform installation.
 
-Date availability and label maturity cannot be proven from these historical tables. The two-week label delay is a demonstration assumption. Category histories use distinct counts; date intervals use decision date only when date columns are explicitly selected. The final holdout is never used to pick a candidate. Undefined or undersized weeks make the stability score unavailable rather than silently disappearing.
+Date availability and label maturity cannot be proven from these historical tables. The two-week label delay is a demonstration assumption. Category histories use distinct counts; date intervals use decision date only when date columns are explicitly selected. The final four weeks are not used to pick a model or calibrator. They have already been inspected and reported, so new results on those weeks are explicitly called retrospective evaluation rather than a newly untouched independent test. Undefined or undersized weeks make relevant metrics unavailable rather than silently disappearing.
 
 Local model activation is an engineering gate (valid evaluation and compatible artifacts), not an automatic approval for real lending. No leaderboard rank, financial benefit, fairness certification, or production deployment is claimed.

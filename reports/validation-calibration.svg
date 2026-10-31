@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440">
+<rect width="100%" height="100%" fill="white"/>
+<text x="380" y="25" text-anchor="middle" font-family="sans-serif" font-size="18">Reliability Diagram</text>
+<path d="M 70 45 V 385 H 735" fill="none" stroke="#111827"/>
+<line x1="70.0" y1="385.0" x2="735.0" y2="45.0" stroke="#9ca3af" stroke-dasharray="5 5"/>
+<polyline points="86.3,379.4 153.4,348.4 225.9,283.0 283.6,385.0 345.1,45.0 86.5,378.3 153.8,332.5 230.8,355.4 290.2,271.7 361.7,385.0 86.9,376.6 153.5,343.8 220.7,317.0 86.8,378.6 155.7,328.9 224.5,277.6 288.9,385.0 343.9,385.0" fill="none" stroke="#2563eb" stroke-width="2"/>
+<text x="80" y="60" font-family="sans-serif" font-size="11" fill="#2563eb">(&#x27;full&#x27;,)</text>
+<polyline points="86.4,379.3 152.9,350.0 228.5,323.2 356.2,45.0 86.6,378.2 153.6,334.8 224.3,312.1 87.1,376.4 154.2,345.2 223.8,306.5 87.0,378.4 155.3,334.5 229.2,142.1 295.5,385.0" fill="none" stroke="#dc2626" stroke-width="2"/>
+<text x="80" y="75" font-family="sans-serif" font-size="11" fill="#dc2626">(&#x27;internal&#x27;,)</text>
+<text x="70.0" y="405" text-anchor="middle" font-family="sans-serif" font-size="11">0.00</text>
+<text x="203.0" y="405" text-anchor="middle" font-family="sans-serif" font-size="11">0.20</text>
+<text x="336.0" y="405" text-anchor="middle" font-family="sans-serif" font-size="11">0.40</text>
+<text x="469.0" y="405" text-anchor="middle" font-family="sans-serif" font-size="11">0.60</text>
+<text x="602.0" y="405" text-anchor="middle" font-family="sans-serif" font-size="11">0.80</text>
+<text x="735.0" y="405" text-anchor="middle" font-family="sans-serif" font-size="11">1.00</text>
+<text x="60" y="389.0" text-anchor="end" font-family="sans-serif" font-size="11">0.00</text>
+<text x="60" y="321.0" text-anchor="end" font-family="sans-serif" font-size="11">0.20</text>
+<text x="60" y="253.0" text-anchor="end" font-family="sans-serif" font-size="11">0.40</text>
+<text x="60" y="185.0" text-anchor="end" font-family="sans-serif" font-size="11">0.60</text>
+<text x="60" y="117.0" text-anchor="end" font-family="sans-serif" font-size="11">0.80</text>
+<text x="60" y="49.0" text-anchor="end" font-family="sans-serif" font-size="11">1.00</text>
+</svg>

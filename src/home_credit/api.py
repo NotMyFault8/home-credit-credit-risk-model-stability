@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 
 from .common import now
 from .data import FEATURE_VERSION
-from .model import load_active, score
+from .model import load_active, score_details
 
 
 class ScoreRequest(BaseModel):
@@ -44,7 +44,7 @@ def create_app(registry=None):
 
         def run():
             bundle = load_active(registry, request.unavailable_sources)
-            predictions = score(bundle, frame)
+            predictions = score_details(bundle, frame)
             return {
                 "model_version": bundle["version"],
                 "feature_version": FEATURE_VERSION,
@@ -53,8 +53,18 @@ def create_app(registry=None):
                 "quality_status": "degraded" if bundle["mode"] == "internal" else "ok",
                 "reason": "external_source_unavailable" if bundle["mode"] == "internal" else None,
                 "predictions": [
-                    {"case_id": int(case), "score": float(p)}
-                    for case, p in zip(frame.case_id, predictions)
+                    {
+                        "case_id": int(case),
+                        # score remains raw for clients of the v0.1 contract.
+                        "score": float(raw),
+                        "raw_score": float(raw),
+                        "calibrated_score": float(calibrated),
+                    }
+                    for case, raw, calibrated in zip(
+                        frame.case_id,
+                        predictions["raw_score"],
+                        predictions["calibrated_score"],
+                    )
                 ],
             }
 

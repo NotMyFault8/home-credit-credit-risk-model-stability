@@ -1,6 +1,6 @@
 # Measured results
 
-**Run date: October 24, 2026.** These are local, retrospective results on the supplied competition training data, not leaderboard scores or production lending outcomes.
+**Run date: October 24, 2026.** These are local, retrospective results on the supplied competition training data, not leaderboard scores or production lending outcomes. Weeks 88–91 have already been inspected and reported; extension analyses on them are not a newly untouched independent test.
 
 ## Dataset and split
 
@@ -51,4 +51,4 @@ The separate [demo results](demo/evaluation.json) use 3,200 fictional applicatio
 
 ## Scope and limitations
 
-The reporting deliverables are a Python-generated model-stability chart and machine-readable aggregate CSV summaries. No interactive dashboard or managed cloud deployment is included. Historical source timing, real label maturity, fairness, production calibration, model governance and operational service-level objectives require separate validation before real lending use.
+Reporting deliverables include a Python-generated model-stability chart, machine-readable aggregate CSV summaries, an automatically generated validation report for new runs, and the packaged Tableau workbook under `reports/tableau/`. No managed cloud deployment is included. Historical source timing, real label maturity, fairness, production calibration, model governance and operational service-level objectives require separate validation before real lending use.

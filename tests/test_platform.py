@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from home_credit.api import create_app
 from home_credit.data import aggregate, build_features, incremental, ingest
 from home_credit.evaluation import evaluate, temporal_splits
-from home_credit.model import activate, load_active, rollback, score
+from home_credit.model import activate, load_active, rollback, score, score_details
 from home_credit.monitoring import psi, report
 from home_credit.synthetic import generate
 from home_credit.workflow import run
@@ -80,6 +80,11 @@ def test_time_boundaries(demo):
         assert frame.loc[tr, "WEEK_NUM"].max() < frame.loc[va, "WEEK_NUM"].min()
         assert not (va & test).any()
     assert not (development & test).any()
+    versions = json.loads((root / "output/registry/active.json").read_text())
+    holdout_min = int(frame.loc[test, "WEEK_NUM"].min())
+    for version in versions.values():
+        metadata = json.loads((root / f"output/registry/{version}/metadata.json").read_text())
+        assert metadata["calibration"]["fit_max_week"] < holdout_min
 
 
 def test_api_batch_parity_fallback_and_contract(demo):
@@ -97,8 +102,19 @@ def test_api_batch_parity_fallback_and_contract(demo):
     client = TestClient(create_app(registry))
     response = client.post("/score", json=request)
     assert response.status_code == 200, response.text
+    assert {"score", "raw_score", "calibrated_score"} <= set(
+        response.json()["predictions"][0]
+    )
     np.testing.assert_allclose(
         [p["score"] for p in response.json()["predictions"]], score(bundle, frame)
+    )
+    np.testing.assert_allclose(
+        [p["score"] for p in response.json()["predictions"]],
+        [p["raw_score"] for p in response.json()["predictions"]],
+    )
+    np.testing.assert_allclose(
+        [p["calibrated_score"] for p in response.json()["predictions"]],
+        score_details(bundle, frame)["calibrated_score"],
     )
     request["unavailable_sources"] = ["bureau"]
     fallback = client.post("/score", json=request)
@@ -121,6 +137,23 @@ def test_rollback(demo):
     activate(registry, versions)
     rollback(registry)
     assert json.loads((registry / "active.json").read_text()) == versions
+
+
+def test_calibrator_is_strictly_bound_to_base_model(demo, tmp_path):
+    import shutil
+
+    import joblib
+
+    root, _ = demo
+    registry = tmp_path / "registry"
+    shutil.copytree(root / "output/registry", registry)
+    versions = json.loads((registry / "active.json").read_text())
+    path = registry / versions["full"] / "model.joblib"
+    bundle = joblib.load(path)
+    bundle["calibration"]["model_version"] = "different-model"
+    joblib.dump(bundle, path)
+    with pytest.raises(ValueError, match="not bound"):
+        activate(registry, versions)
 
 
 def test_label_delay_and_psi(demo):

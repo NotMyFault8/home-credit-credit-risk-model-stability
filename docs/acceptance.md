@@ -11,8 +11,12 @@
 | Recovery | External outage, audited failed run, distinct-version rollback | Passed |
 | Performance measurement | Runtime, RSS, in-process serial P95 and throughput recorded | Passed within stated scope |
 | Reporting consistency | Python-generated chart and CSV summaries use explicit week, model, maturity and sample-scope fields | Passed |
+| Calibration isolation | Calibrators use strictly out-of-time development predictions; final evaluation weeks are excluded | Passed on synthetic CI fixtures |
+| Full/Internal calibrator binding | Calibrator metadata is version/mode-bound and checked on activation/load | Passed on synthetic CI fixtures |
+| Segment robustness | Development-frozen boundaries, missing/unknown groups and low-count non-estimable states | Passed on synthetic CI fixtures |
+| Validation report | Markdown and SVG outputs regenerate from persisted JSON/CSV evidence | Passed on synthetic CI fixtures |
 | Reproducible small flow | Demo, tests and optional Prefect/MLflow runs | Passed |
 
 The final competition configuration uses all applications and a curated field subset; it is not an exhaustive feature search. Tests use synthetic data and require no competition download. CI reruns lint, tests and the small demonstration. The Docker image builds and starts successfully. Its live health endpoint returned ready and its HTTP scoring matched local batch predictions exactly on three verification records. CI also runs the fictional end-to-end flow inside the container.
 
-Not claimed: interactive dashboards, Kubernetes/cloud deployment, real CDC, live banking integration, production fairness certification, business profit, or competition ranking.
+The repository includes a packaged Tableau workbook, but no managed/hosted dashboard service is claimed. Also not claimed: Kubernetes/cloud deployment, real CDC, live banking integration, production fairness certification, business profit, or competition ranking.
