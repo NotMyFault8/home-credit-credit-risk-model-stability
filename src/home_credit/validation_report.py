@@ -182,8 +182,19 @@ def generate_validation_report(run_root, destination=None):
                 "",
                 "Calibration comparison is recorded in `bi/calibration_comparison.csv`; improvements "
                 "must be judged by the numeric Brier/log-loss/ECE comparison, not chart appearance.",
+                "",
+                "| Mode | Score | AUC | Brier | Log loss | ECE | O/E | Intercept | Slope |",
+                "|---|---|---:|---:|---:|---:|---:|---:|---:|",
             ]
         )
+        for row in calibration.to_dict(orient="records"):
+            lines.append(
+                f"| {row.get('mode', 'unavailable')} | {row.get('score_type', 'unavailable')} | "
+                f"{_fmt(row.get('auc'))} | {_fmt(row.get('brier'))} | "
+                f"{_fmt(row.get('log_loss'))} | {_fmt(row.get('ece'))} | "
+                f"{_fmt(row.get('oe_ratio'))} | {_fmt(row.get('calibration_intercept'))} | "
+                f"{_fmt(row.get('calibration_slope'))} |"
+            )
     if (destination.parent / "validation-calibration.svg").exists():
         lines.extend(["", "![Reliability diagram](validation-calibration.svg)"])
     lines.extend(

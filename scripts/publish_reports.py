@@ -5,10 +5,12 @@ import json
 import shutil
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from home_credit.common import write_json
 from home_credit.monitoring import report
+from home_credit.validation_report import generate_validation_report
 
 
 def publish(source, output, label):
@@ -17,6 +19,16 @@ def publish(source, output, label):
     evaluation = json.loads((source / "evaluation.json").read_text())
     gold = pd.read_parquet(source / "data/gold.parquet")
     pred = pd.read_parquet(source / "predictions.parquet")
+    score_bin_edges = {}
+    for mode, protocol in evaluation.get("calibration_protocols", {}).items():
+        score_bin_edges[mode] = {}
+        for score_type, stored in protocol["score_bin_edges"].items():
+            score_bin_edges[mode][score_type] = np.array(
+                [
+                    -np.inf if index == 0 and value is None else np.inf if value is None else value
+                    for index, value in enumerate(stored)
+                ]
+            )
     # Retrospective report: all archived holdout labels now mature. Replay exports
     # in the original run retain the original observation cutoff and pending labels.
     report(
@@ -25,8 +37,17 @@ def publish(source, output, label):
         gold[gold.WEEK_NUM < pred.WEEK_NUM.min()],
         output / "bi",
         as_of_week=int(pred.WEEK_NUM.max()) + 2,
+        score_bin_edges=score_bin_edges or None,
     )
     shutil.copy2(source / "bi/pipeline_runs.csv", output / "bi/pipeline_runs.csv")
+    for filename in [
+        "calibration_comparison.csv",
+        "calibration_metrics_weekly.csv",
+        "segment_definitions.json",
+        "segment_performance.csv",
+    ]:
+        if (source / "bi" / filename).exists():
+            shutil.copy2(source / "bi" / filename, output / "bi" / filename)
     for filename in ["evaluation.json", "verification.json", "ablations.json", "ablations.csv"]:
         if (source / filename).exists():
             shutil.copy2(source / filename, output / filename)
@@ -47,6 +68,7 @@ def publish(source, output, label):
             "synthetic": evaluation["synthetic"],
         },
     )
+    generate_validation_report(output)
 
 
 if __name__ == "__main__":

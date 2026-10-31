@@ -25,28 +25,35 @@ Three expanding temporal folds are used for model selection and out-of-time cali
 
 | Mode | AUC | Gini | Brier | Log loss | ECE | O/E | Stability |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| full | 0.767139 | 0.534277 | 0.021428 | unavailable | unavailable | unavailable | 0.521721 |
-| internal | 0.764634 | 0.529267 | 0.021461 | unavailable | unavailable | unavailable | 0.516981 |
+| full | 0.767139 | 0.534277 | 0.021428 | 0.097868 | 0.005514 | 0.820808 | 0.521721 |
+| internal | 0.764634 | 0.529267 | 0.021461 | 0.098195 | 0.005409 | 0.824359 | 0.516981 |
 
-Calibration comparison evidence: unavailable.
+Calibration comparison is recorded in `bi/calibration_comparison.csv`; improvements must be judged by the numeric Brier/log-loss/ECE comparison, not chart appearance.
+
+| Mode | Score | AUC | Brier | Log loss | ECE | O/E | Intercept | Slope |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| full | raw_score | 0.767139 | 0.021428 | 0.097868 | 0.005481 | 0.820808 | 0.613774 | 1.257168 |
+| full | calibrated_score | 0.767139 | 0.021428 | 0.097084 | 0.003104 | 1.142024 | 0.170518 | 1.008225 |
+| internal | raw_score | 0.764634 | 0.021461 | 0.098195 | 0.005690 | 0.824359 | 0.724698 | 1.288337 |
+| internal | calibrated_score | 0.764634 | 0.021449 | 0.097388 | 0.003388 | 1.140522 | 0.189152 | 1.014140 |
 
 ![Reliability diagram](validation-calibration.svg)
 
 ## 6. Segment Performance
 
-Segment evidence is unavailable; fairness was not assessed.
+`bi/segment_performance.csv` contains 260 overall/segment/time rows with explicit non-estimable states. This is segment robustness analysis, not fairness certification.
 
 ## 7. Stability & Drift
 
-The legacy artifact includes weekly performance, numeric feature PSI, missingness and coverage; categorical PSI and raw/calibrated score PSI are unavailable until a new run.
+Weekly performance, feature PSI (numeric and categorical), missingness, source coverage, raw/calibrated score distributions, and score PSI are written under `bi/`.
 PSI > 0.2 is an explanatory example threshold, not an automatic approval or retraining rule.
-The run produced 0 traceable alert rows.
+The run produced 4 traceable alert rows.
 
 ![Weekly AUC trend](validation-weekly-auc.svg)
 
 ## 8. Operational Verification
 
-The committed legacy run verifies raw-score batch/API parity and paired Full/Internal activation/rollback. Calibrator parity and binding are unavailable for this pre-extension artifact; they are exercised by the current synthetic test suite.
+Batch and API use the same bound model/calibrator transformation. Model metadata records data, code, feature, seed, mode, base-model and calibrator versions. Activation/rollback continues to operate on the paired Full/Internal bundles.
 
 ## 9. Limitations & Risks
 

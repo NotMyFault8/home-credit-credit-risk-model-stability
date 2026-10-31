@@ -1,0 +1,99 @@
+[
+  {
+    "name": "credit_amount",
+    "column": "static__credamount_770A",
+    "kind": "numeric",
+    "edges": [
+      null,
+      19978.0,
+      34997.0,
+      63292.299999999996,
+      null
+    ],
+    "source": "development_quantiles"
+  },
+  {
+    "name": "credit_type",
+    "column": "static__credtype_322L",
+    "kind": "categorical",
+    "categories": [
+      "CAL",
+      "COL",
+      "REL"
+    ],
+    "source": "development_categories"
+  },
+  {
+    "name": "occupation_income_history",
+    "column": "person__mainoccupationinc_384A__mean",
+    "kind": "numeric",
+    "edges": [
+      null,
+      36000.0,
+      50000.0,
+      70000.0,
+      null
+    ],
+    "source": "development_quantiles"
+  },
+  {
+    "name": "delinquency_history",
+    "column": "bureau__dpd_550P__mean",
+    "kind": "numeric",
+    "edges": [
+      null,
+      null
+    ],
+    "source": "development_quantiles"
+  },
+  {
+    "name": "external_bureau_coverage",
+    "column": "bureau__available",
+    "kind": "categorical",
+    "categories": [
+      "0",
+      "1"
+    ],
+    "source": "development_categories"
+  },
+  {
+    "name": "development_risk_tier",
+    "column": "raw_score",
+    "kind": "numeric",
+    "edges": [
+      null,
+      0.010665718092470983,
+      0.012758497092752303,
+      0.015136700479927932,
+      0.01715529233418799,
+      0.019207985582608004,
+      0.023317967352963095,
+      0.0293718621766972,
+      0.039638473974807284,
+      0.05930800066651141,
+      null
+    ],
+    "source": "development_temporal_oof_quantiles",
+    "mode": "full"
+  },
+  {
+    "name": "development_risk_tier",
+    "column": "raw_score",
+    "kind": "numeric",
+    "edges": [
+      null,
+      0.010524406462425773,
+      0.012719687051926942,
+      0.01506720578542341,
+      0.017347649800970994,
+      0.01935436361971358,
+      0.02330155791229058,
+      0.029272515201159116,
+      0.03963378842723652,
+      0.059402810730014965,
+      null
+    ],
+    "source": "development_temporal_oof_quantiles",
+    "mode": "internal"
+  }
+]

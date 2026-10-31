@@ -28,6 +28,8 @@ The pipeline writes small CSV tables under `reports/competition/bi/` and `report
 
 Python computes metrics before export. Keep model modes, weeks, label maturity and sample scope visible when comparing rows. AUC and Gini are not additive; use the overall evaluation metrics for whole-period comparisons. Empty metric cells mean unavailable, not zero.
 
-Each new run also writes `MODEL_VALIDATION_REPORT.md`, `validation-calibration.svg` and `validation-weekly-auc.svg`. See the committed [validation report](MODEL_VALIDATION_REPORT.md) for the existing retrospective evidence; unavailable extension results remain explicitly marked until the restricted real dataset is rerun.
+Each new run also writes `MODEL_VALIDATION_REPORT.md`, `validation-calibration.svg` and `validation-weekly-auc.svg`. See the committed [validation report](MODEL_VALIDATION_REPORT.md) for the latest retrospective evidence.
+
+The October 31 real-data extension evidence is published separately under [`competition-extension/`](competition-extension/) so the original October 24 aggregate artifacts remain intact.
 
 See [measured results](RESULTS.md) for real-data values and limitations, and [the data guide](../docs/data-dictionary.md) for table grain and definitions.

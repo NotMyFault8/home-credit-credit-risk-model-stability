@@ -1,0 +1,5 @@
+WEEK_NUM,model_version,mode,metric,feature,value,threshold,reference_scope,interpretation
+88,"987af1c19c3850f0,a62dc770cea6f787",all,feature_psi,person__records,0.7632471123960787,0.2,development_weeks_0_87,diagnostic example; not an automatic approval or retraining rule
+89,"987af1c19c3850f0,a62dc770cea6f787",all,feature_psi,person__records,0.7745560503311795,0.2,development_weeks_0_87,diagnostic example; not an automatic approval or retraining rule
+90,"987af1c19c3850f0,a62dc770cea6f787",all,feature_psi,person__records,0.6430606289689794,0.2,development_weeks_0_87,diagnostic example; not an automatic approval or retraining rule
+91,"987af1c19c3850f0,a62dc770cea6f787",all,feature_psi,person__records,0.945442506575009,0.2,development_weeks_0_87,diagnostic example; not an automatic approval or retraining rule

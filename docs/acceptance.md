@@ -15,6 +15,7 @@
 | Full/Internal calibrator binding | Calibrator metadata is version/mode-bound and checked on activation/load | Passed on synthetic CI fixtures |
 | Segment robustness | Development-frozen boundaries, missing/unknown groups and low-count non-estimable states | Passed on synthetic CI fixtures |
 | Validation report | Markdown and SVG outputs regenerate from persisted JSON/CSV evidence | Passed on synthetic CI fixtures |
+| Real-data validation extension | 1,526,659 applications; development-only calibrator selection; retrospective Week 88–91 calibration, segment and drift evidence | Passed on October 31, 2026 |
 | Reproducible small flow | Demo, tests and optional Prefect/MLflow runs | Passed |
 
 The final competition configuration uses all applications and a curated field subset; it is not an exhaustive feature search. Tests use synthetic data and require no competition download. CI reruns lint, tests and the small demonstration. The Docker image builds and starts successfully. Its live health endpoint returned ready and its HTTP scoring matched local batch predictions exactly on three verification records. CI also runs the fictional end-to-end flow inside the container.
